@@ -16,6 +16,7 @@ import { LocationTrackerProvider } from '../providers/location-tracker/location-
 import { BackgroundGeolocation } from '@ionic-native/background-geolocation';
 import { GoogleMaps } from '@ionic-native/google-maps';
 import { MostrarRecorridoPage } from '../pages/mostrar-recorrido/mostrar-recorrido';
+import { LocationAccuracy } from '@ionic-native/location-accuracy'
 
 
 @NgModule({
@@ -47,7 +48,8 @@ import { MostrarRecorridoPage } from '../pages/mostrar-recorrido/mostrar-recorri
     LocationTrackerProvider,
     BackgroundGeolocation,    
     Geolocation,
-    GoogleMaps
+    GoogleMaps,
+    LocationAccuracy
   ]
 })
 export class AppModule {}

@@ -1,6 +1,7 @@
 import { Injectable, NgZone } from '@angular/core';
 import { BackgroundGeolocation, BackgroundGeolocationResponse, BackgroundGeolocationConfig, BackgroundGeolocationEvents } from '@ionic-native/background-geolocation';
 import { Geolocation, Geoposition } from '@ionic-native/geolocation';
+import { LocationAccuracy } from '@ionic-native/location-accuracy';
 
 
 
@@ -12,12 +13,14 @@ export class LocationTrackerProvider {
   public lng: number = 0;
   private coordenadas:Array<[number, number]>=new Array();
 
-  constructor(public zone: NgZone, public geolocation:Geolocation, public backgroundGeolocation:BackgroundGeolocation) {
+  constructor(public zone: NgZone, public geolocation:Geolocation, public backgroundGeolocation:BackgroundGeolocation, 
+    public locationAccuracy:LocationAccuracy) {
     console.log('Hello LocationTrackerProvider Provider');
   }
 
   startTracking() {
     this.coordenadas=new Array();
+
     const config: BackgroundGeolocationConfig = {
       desiredAccuracy: 0,
       stationaryRadius: 20,
@@ -58,9 +61,21 @@ export class LocationTrackerProvider {
           this.lng = position.coords.longitude;
         });
         
-      });
+    });
+
+    //solicito que se habilite el GPS, si no estuviera.
+    this.locationAccuracy.canRequest().then((canRequest: boolean) => {
+      if(canRequest) {
+        // the accuracy option will be ignored by iOS
+        this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(() => {
+          console.log('Se habilitó el uso del GPS')
+
+        },error => console.log('Error requesting location permissions', error)
+        );
+      }
+    });
       
-    }
+  }
     
   stopTracking() {
     

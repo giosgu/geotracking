@@ -31,40 +31,41 @@ export class LocationTrackerProvider {
       this.backgroundGeolocation
         .on(BackgroundGeolocationEvents.location)
         .subscribe((location: BackgroundGeolocationResponse) => {
-          console.log(Date() + " background location: " + location.latitude + " " + location.longitude);
+          console.info(Date() + " background location: " + location.latitude + " " + location.longitude);
           let coordenada:[number, number] = [location.latitude, location.longitude ]
           this.coordenadas.push(coordenada)
         });
-    });
-
-    // start recording location
-    this.backgroundGeolocation.start();
-
-     // Foreground Tracking
-    let options = {
-      frequency: 3000, 
-      enableHighAccuracy: true
-      
-    };
-
-    this.watch = this.geolocation.watchPosition(options).subscribe((position: Geoposition) => {
-
-      console.log(Date() + " foreground location: " + position.coords.latitude + " " + position.coords.longitude);
-      let coordenada:[number, number] = [position.coords.latitude, position.coords.longitude ]
-      this.coordenadas.push(coordenada)
-      // Run update inside of Angular's zone
-      this.zone.run(() => {
-        this.lat = position.coords.latitude;
-        this.lng = position.coords.longitude;
       });
-
-    });
+      
+      // start recording location
+      this.backgroundGeolocation.start();
+      
+      // Foreground Tracking
+      let options = {
+        frequency: 3000, 
+        enableHighAccuracy: true
+        
+      };
+      
+      this.watch = this.geolocation.watchPosition(options).subscribe((position: Geoposition) => {
+        
+        console.info(Date() + " foreground location: " + position.coords.latitude + " " + position.coords.longitude);
+        let coordenada:[number, number] = [position.coords.latitude, position.coords.longitude ]
+        this.coordenadas.push(coordenada)
+        // Run update inside of Angular's zone
+        this.zone.run(() => {
+          this.lat = position.coords.latitude;
+          this.lng = position.coords.longitude;
+        });
+        
+      });
+      
+    }
     
-  }
-
   stopTracking() {
-
-    console.log('stopTracking');
+    
+    console.info('stopTracking');
+    this.backgroundGeolocation.stop();
     this.backgroundGeolocation.finish();
     this.watch.unsubscribe();
     console.info("Stop Tracking. Las coordenadas registraron fueron: ")

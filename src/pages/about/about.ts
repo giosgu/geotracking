@@ -36,28 +36,27 @@ export class AboutPage {
 
       map.animateCamera(position);
       let posicionAnterior:[number, number]= null;
-    this.coordenadas.forEach(coordenada => {
-      console.info("Cargando coordenada " + coordenada[0] + " " + coordenada[1])
-      if(posicionAnterior == null){
-        posicionAnterior = coordenada
-      }
-      map.addPolyline(
-        {
-          points: [new LatLng(posicionAnterior[0], posicionAnterior[1]), new LatLng(coordenada[0], coordenada[1])],
-          visible: true,
-          color:'#FF0000',
-          width:10
-        }).then(
-        (res)=>{
+      this.coordenadas.forEach(coordenada => {
+        if(posicionAnterior == null){
           posicionAnterior = coordenada
         }
-      ).catch(
-        (err)=>{
-          console.log("err: "+JSON.stringify(err));
-        }
-      );
-      
-    });
+        console.info("Cargando segmento: " +  posicionAnterior[0] + " " +  posicionAnterior[1] + " - " + coordenada[0] + " " + coordenada[1])
+        map.addPolyline(
+          {
+            points: [new LatLng(posicionAnterior[0], posicionAnterior[1]), new LatLng(coordenada[0], coordenada[1])],
+            visible: true,
+            color:'#FF0000',
+            width:10
+          }).then((res)=>{
+          }
+          ).catch(
+            (err)=>{
+              console.log("err: "+JSON.stringify(err));
+            }
+        );
+        posicionAnterior = coordenada
+        console.info("Posición anterior: --> " + posicionAnterior[0] + " " + posicionAnterior[1] )
+      });
 
     })
   }

@@ -1,3 +1,4 @@
+import {Geolocation} from '@ionic-native/geolocation';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
@@ -11,13 +12,20 @@ import { TabsPage } from '../pages/tabs/tabs';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
+import { LocationTrackerProvider } from '../providers/location-tracker/location-tracker';
+import { BackgroundGeolocation } from '@ionic-native/background-geolocation';
+import { GoogleMaps } from '@ionic-native/google-maps';
+import { MostrarRecorridoPage } from '../pages/mostrar-recorrido/mostrar-recorrido';
+
+
 @NgModule({
   declarations: [
     MyApp,
     AboutPage,
     ContactPage,
     HomePage,
-    TabsPage
+    TabsPage,
+    MostrarRecorridoPage
   ],
   imports: [
     BrowserModule,
@@ -29,12 +37,17 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     AboutPage,
     ContactPage,
     HomePage,
-    TabsPage
+    TabsPage, 
+    MostrarRecorridoPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler}, 
+    LocationTrackerProvider,
+    BackgroundGeolocation,    
+    Geolocation,
+    GoogleMaps
   ]
 })
 export class AppModule {}
